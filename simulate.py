@@ -4,7 +4,7 @@ import time
 import pyrosim.pyrosim as pyrosim
 import numpy
 
-steps_in_sim=300
+steps_in_sim=100
 
 
 physicsClient = p.connect(p.GUI)
@@ -32,4 +32,4 @@ for i in range(steps_in_sim):
 
 p.disconnect()
 
-print(backLegSensorValues)
+numpy.save("data/backLegSensorValues.npy",backLegSensorValues)
