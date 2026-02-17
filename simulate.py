@@ -4,7 +4,8 @@ import time
 import pyrosim.pyrosim as pyrosim
 import numpy
 
-steps_in_sim=100
+
+steps_in_sim=200
 
 
 physicsClient = p.connect(p.GUI)
@@ -16,8 +17,11 @@ robotId = p.loadURDF("body.urdf")
 p.loadSDF("world.sdf")
 
 pyrosim.Prepare_To_Simulate(robotId)
+
+#sensors
 backLegSensorValues = numpy.zeros(steps_in_sim)
-print(backLegSensorValues)
+frontLegSensorValues = numpy.zeros(steps_in_sim)
+
 
 
 for i in range(steps_in_sim): 
@@ -27,9 +31,20 @@ for i in range(steps_in_sim):
     backLegTouch = pyrosim.Get_Touch_Sensor_Value_For_Link("BackLeg")
     backLegSensorValues[i]=backLegTouch
 
+    frontLegTouch = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
+    frontLegSensorValues[i]=frontLegTouch
+
+    pyrosim.Set_Motor_For_Joint(
+        bodyIndex = robotId,
+        jointName = b'Torso_BackLeg',
+        controlMode = p.POSITION_CONTROL,
+        targetPosition = 0.0,
+        maxForce = 500)
+
     time.sleep(1/120)
     
 
 p.disconnect()
 
 numpy.save("data/backLegSensorValues.npy",backLegSensorValues)
+numpy.save("data/frontLegSensorValues.npy",frontLegSensorValues)
