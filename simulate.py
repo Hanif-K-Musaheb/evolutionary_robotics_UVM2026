@@ -2,10 +2,12 @@ import pybullet as p
 import pybullet_data
 import time
 import pyrosim.pyrosim as pyrosim
-import numpy
+import numpy as np
+import math
+import random
 
 
-steps_in_sim=200
+steps_in_sim=1000
 
 
 physicsClient = p.connect(p.GUI)
@@ -19,10 +21,32 @@ p.loadSDF("world.sdf")
 pyrosim.Prepare_To_Simulate(robotId)
 
 #sensors
-backLegSensorValues = numpy.zeros(steps_in_sim)
-frontLegSensorValues = numpy.zeros(steps_in_sim)
+backLegSensorValues = np.zeros(steps_in_sim)
+frontLegSensorValues = np.zeros(steps_in_sim)
+
+pi=math.pi
+
+max_force=60
+
+linearly_spaced_values = np.linspace(0, 2 * np.pi, steps_in_sim)#vector for movement vals
+
+#front leg
+amplitude_F = pi/3
+frequency_F = 30
+phaseOffset_F = 0
+target_angles_F=(amplitude_F*np.sin((linearly_spaced_values*frequency_F+phaseOffset_F)))
 
 
+#back leg
+amplitude_B = pi/3
+frequency_B = 10
+phaseOffset_B = 0.5*pi
+target_angles_B=(amplitude_B*np.sin((linearly_spaced_values*frequency_B+phaseOffset_B)))
+
+
+np.save("data/target_angles_B.npy",target_angles_B)
+np.save("data/target_angles_F.npy",target_angles_F)
+# quit()
 
 for i in range(steps_in_sim): 
     
@@ -34,17 +58,26 @@ for i in range(steps_in_sim):
     frontLegTouch = pyrosim.Get_Touch_Sensor_Value_For_Link("FrontLeg")
     frontLegSensorValues[i]=frontLegTouch
 
+    targetPosition = random.uniform(-1,1)*pi/2
+
     pyrosim.Set_Motor_For_Joint(
         bodyIndex = robotId,
         jointName = b'Torso_BackLeg',
         controlMode = p.POSITION_CONTROL,
-        targetPosition = 0.0,
-        maxForce = 500)
+        targetPosition = target_angles_B[i],
+        maxForce = max_force)
+    
+    pyrosim.Set_Motor_For_Joint(
+        bodyIndex = robotId,
+        jointName = b'Torso_FrontLeg',
+        controlMode = p.POSITION_CONTROL,
+        targetPosition = target_angles_F[i],
+        maxForce = max_force)
 
-    time.sleep(1/120)
+    time.sleep(1/(60*8))
     
 
 p.disconnect()
 
-numpy.save("data/backLegSensorValues.npy",backLegSensorValues)
-numpy.save("data/frontLegSensorValues.npy",frontLegSensorValues)
+np.save("data/backLegSensorValues.npy",backLegSensorValues)
+np.save("data/frontLegSensorValues.npy",frontLegSensorValues)
