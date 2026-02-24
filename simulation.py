@@ -22,6 +22,7 @@ class SIMULATION:
 
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.robot.Prepare_To_Sense()
+        self.robot.Prepare_To_Act()
        
     
     def __del__(self):
@@ -32,6 +33,7 @@ class SIMULATION:
         for it in range(c.steps_in_sim):
             p.stepSimulation()
             self.robot.sense(it)
+            self.robot.Act(it,self.robotId)
 
             time.sleep(c.time_step)
 

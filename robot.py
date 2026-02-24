@@ -9,8 +9,8 @@ import pybullet as p
 class ROBOT:
     def __init__(self):
         pass
+        
 
-    
     def Prepare_To_Sense(self):
         self.sensors={}
         for linkName in pyrosim.linkNamesToIndices:
@@ -24,6 +24,10 @@ class ROBOT:
         self.motors={}
         for jointName in pyrosim.jointNamesToIndices:
             self.motors[jointName] = MOTOR(jointName)
+    
+    def Act(self,i,robotID):
+        for m in self.motors:
+            self.motors[m].set_value(i,robotID)
 
 
 
