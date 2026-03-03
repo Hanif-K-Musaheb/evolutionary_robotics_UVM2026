@@ -2,7 +2,7 @@ import math
 
 steps_in_sim=1000#1000
 max_force=60
-time_step = 1/(60*9)
+time_step = 1/(60*8)
 
 #front leg settings
 amplitude_F = math.pi/3

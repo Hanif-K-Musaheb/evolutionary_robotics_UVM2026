@@ -15,6 +15,9 @@ class MOTOR:
         self.frequency=c.frequency_B
         self.offset=c.phaseOffset_B
 
+        if self.jointName == b'Torso_BackLeg':
+            self.frequency = self.frequency/2
+
         # generate vector of sinusoidally varying values
         firstVector = np.linspace(0, np.pi * 2, c.steps_in_sim)
         # Back Leg

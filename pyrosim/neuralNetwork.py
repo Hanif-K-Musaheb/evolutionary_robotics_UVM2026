@@ -27,6 +27,11 @@ class NEURAL_NETWORK:
         self.Print_Motor_Neuron_Values()
 
         print("")
+    
+    def Update(self):
+        for key in self.neurons.keys():
+            if self.neurons[key].Is_Sensor_Neuron():
+                self.neurons[key].Update_Sensor_Neuron()
 
 # ---------------- Private methods --------------------------------------
 
