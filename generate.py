@@ -1,5 +1,4 @@
 import pyrosim.pyrosim as pyrosim
-
 import constants as c
 import random
 
