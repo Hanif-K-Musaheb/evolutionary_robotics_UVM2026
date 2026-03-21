@@ -7,3 +7,5 @@ import hillclimber
 #     os.system("python3 simulate.py")
 
 hc = hillclimber.HILL_CLIMBER()
+
+hc.Evolve()
