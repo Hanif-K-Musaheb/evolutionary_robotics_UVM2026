@@ -1,8 +1,6 @@
 import pyrosim.pyrosim as pyrosim
-<<<<<<< HEAD
-=======
+
 import constants as c
->>>>>>> d807f0fc71650a3b6667ac3b54dd968aa0b732e4
 import random
 
 def Create_World():
