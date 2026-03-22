@@ -8,8 +8,8 @@ from world import WORLD
 
 
 class SIMULATION:
-    def __init__(self,directOrGUI):
-        self.robot=ROBOT()
+    def __init__(self,directOrGUI,solutionID):
+        self.robot=ROBOT(solutionID)
         self.world = WORLD()
 
         print(directOrGUI,'='*20)

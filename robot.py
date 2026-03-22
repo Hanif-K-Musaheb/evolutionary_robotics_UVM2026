@@ -5,10 +5,13 @@ import constants as c
 import numpy as np
 import pybullet as p
 from pyrosim.neuralNetwork import NEURAL_NETWORK
+import os
 
 class ROBOT:
-    def __init__(self):
-        self.nn = NEURAL_NETWORK("brain.nndf")#adds the neural net to nndf file
+    def __init__(self,solutionID):
+        self.nn = NEURAL_NETWORK(f"brain_{solutionID}.nndf")#adds the neural net to nndf file
+        self.solutionID = solutionID
+       #os.system(f"rm brain_{solutionID}.nndf")
         
     def Prepare_To_Sense(self):
         self.sensors={}
