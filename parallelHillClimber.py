@@ -1,9 +1,12 @@
 import solution
 import constants as c
 import copy
+import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
+        #os.system("rm brain*.nndf")
+        #os.system("rm fitness*.txt")
         self.nextAvailableID = 0
         self.parents = {}
         for i in range(c.populationSize):
@@ -15,7 +18,12 @@ class PARALLEL_HILL_CLIMBER:
 
     def Evolve(self):
         for parent in self.parents:
-            self.parents[parent].Evaluate("GUI")
+            self.parents[parent].Start_Simulation("GUI")#GUI
+
+
+        for parent in self.parents:
+            self.parents[parent].Wait_For_Simulation_To_End()
+
         # for currentGeneration in range(c.numberOfGenerations):
         #     isLastGen= True if currentGeneration==0 else False
         #     self.Evolve_For_One_Generation(isLastGen)

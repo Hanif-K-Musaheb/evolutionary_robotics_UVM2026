@@ -2,7 +2,7 @@ import numpy
 
 steps_in_sim=1000#1000
 max_force=50
-time_step = 0#1/(60*8)
+time_step = (1/(60*8))/100
 
 dist2ground=.5
 

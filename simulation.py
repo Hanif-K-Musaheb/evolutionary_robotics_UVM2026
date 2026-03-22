@@ -45,10 +45,9 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(it,self.robotId)
 
-            self.robot.Get_Fitness(self.robotId)
-
-            
             if directOrGUI!= "DIRECT" and directOrGUI!= None:time.sleep(c.time_step)
+        
+        self.robot.Get_Fitness(self.robotId)
             
 
     

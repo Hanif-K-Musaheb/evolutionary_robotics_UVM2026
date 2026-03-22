@@ -9,18 +9,43 @@ class SOLUTION:
         self.myID = nextAvailableID
         self.weights = (np.random.rand(3,2))*2-1
     
-    def Evaluate(self,directOrGUI):
+    # def Evaluate(self,directOrGUI):
+    #     self.Create_World()
+    #     self.Create_Body()
+    #     self.Create_Brain()
+    #     os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+
+    #     while not os.path.exists("fitness.txt"):
+    #         time.sleep(0.01)
+
+    #     fitness_file = open(f"fitness{self.myID}.txt")
+    #     self.fitness = float(fitness_file.readline())
+    #     print(self.fitness)
+    #     fitness_file.close()
+
+    def Start_Simulation(self,directOrGUI):
+        #if self.myID == 0:
         self.Create_World()
         self.Create_Body()
         self.Create_Brain()
+
+        if os.path.exists(f"fitness{self.myID}.txt"):
+            os.remove(f"fitness{self.myID}.txt")
+            
         os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
 
-        while not os.path.exists("fitness.txt"):
+
+    def Wait_For_Simulation_To_End(self):
+        while not os.path.exists(f"fitness{self.myID}.txt"):
             time.sleep(0.01)
 
-        fitness_file = open("fitness.txt")
+        fitness_file = open(f"fitness{self.myID}.txt")
         self.fitness = float(fitness_file.readline())
+        print(f"fitness:{self.fitness}")
         fitness_file.close()
+        os.system(f"rm fitness{self.myID}.txt")
+
+
 
     def Mutate(self):
         randomRow = random.randint(0,2)
