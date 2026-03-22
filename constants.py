@@ -2,9 +2,11 @@ import numpy
 
 steps_in_sim=1000#1000
 max_force=50
-time_step = 1/(60*8)
+time_step = 0#1/(60*8)
 
 dist2ground=.5
+
+numberOfGenerations = 10
 
 #front leg settings
 amplitude_F =  -numpy.pi/2

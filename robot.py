@@ -10,7 +10,6 @@ class ROBOT:
     def __init__(self):
         self.nn = NEURAL_NETWORK("brain.nndf")#adds the neural net to nndf file
         
-
     def Prepare_To_Sense(self):
         self.sensors={}
         for linkName in pyrosim.linkNamesToIndices:
@@ -37,6 +36,16 @@ class ROBOT:
 
         # for m in self.motors:
         #     self.motors[m].set_value(i,robotID)
+
+    def Get_Fitness(self,robotId):
+        stateOfLinkZero = p.getLinkState(robotId,0)[0]
+        xCoordinateOfLinkZero = stateOfLinkZero[0]
+        #print(stateOfLinkZero,xCoordinateOfLinkZero)
+        with open("fitness.txt", "w") as file:
+            file.write(f"{xCoordinateOfLinkZero}")
+
+
+
     
     def Think(self):
         self.nn.Update()
