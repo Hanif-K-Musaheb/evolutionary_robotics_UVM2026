@@ -6,12 +6,13 @@ import numpy as np
 import pybullet as p
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
+import time
 
 class ROBOT:
     def __init__(self,solutionID):
         self.nn = NEURAL_NETWORK(f"brain_{solutionID}.nndf")#adds the neural net to nndf file
         self.solutionID = solutionID
-       #os.system(f"rm brain_{solutionID}.nndf")
+        #os.system(f"rm brain_{solutionID}.nndf")
         
     def Prepare_To_Sense(self):
         self.sensors={}

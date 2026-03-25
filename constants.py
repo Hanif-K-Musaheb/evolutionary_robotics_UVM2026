@@ -7,7 +7,7 @@ time_step = (1/(60*8))/100
 dist2ground=.5
 
 numberOfGenerations = 10
-populationSize=2
+populationSize=10
 
 #front leg settings
 amplitude_F =  -numpy.pi/2

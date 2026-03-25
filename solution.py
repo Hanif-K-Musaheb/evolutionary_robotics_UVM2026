@@ -29,10 +29,12 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
 
+        
+
         if os.path.exists(f"fitness{self.myID}.txt"):
             os.remove(f"fitness{self.myID}.txt")
             
-        os.system(f"python3 simulate.py {directOrGUI} {self.myID} &")
+        os.system(f"python3 simulate.py {directOrGUI} {self.myID} 2>&1 &")
 
 
     def Wait_For_Simulation_To_End(self):
@@ -41,7 +43,7 @@ class SOLUTION:
 
         fitness_file = open(f"fitness{self.myID}.txt")
         self.fitness = float(fitness_file.readline())
-        print(f"fitness:{self.fitness}")
+        print(f"\nfitness {self.myID}:{self.fitness}")
         fitness_file.close()
         os.system(f"rm fitness{self.myID}.txt")
 

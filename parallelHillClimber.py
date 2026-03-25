@@ -5,8 +5,8 @@ import os
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        #os.system("rm brain*.nndf")
-        #os.system("rm fitness*.txt")
+        os.system("rm brain*.nndf")
+        os.system("rm fitness*.txt")
         self.nextAvailableID = 0
         self.parents = {}
         for i in range(c.populationSize):
@@ -17,46 +17,63 @@ class PARALLEL_HILL_CLIMBER:
 
 
     def Evolve(self):
-        for parent in self.parents:
-            self.parents[parent].Start_Simulation("GUI")#GUI
-
-
-        for parent in self.parents:
-            self.parents[parent].Wait_For_Simulation_To_End()
-
-        # for currentGeneration in range(c.numberOfGenerations):
-        #     isLastGen= True if currentGeneration==0 else False
-        #     self.Evolve_For_One_Generation(isLastGen)
+        self.Evaluate(self.parents)
+        
+        for currentGeneration in range(c.numberOfGenerations):
+            isLastGen= True if currentGeneration==0 else False
+            self.Evolve_For_One_Generation(isLastGen)
     
     
     def Evolve_For_One_Generation(self,isFirstGen):
         self.Spawn()
         self.Mutate()
-        if isFirstGen: self.child.Evaluate("GUI")
-        else: self.child.Evaluate("DIRECT")
+        self.Evaluate(self.children)
         self.Print()
         self.Select()
+        
 
     def Spawn(self):
-        self.child = copy.deepcopy(self.parent)
+        self.children={}
+        for key in self.parents:
+            self.children[key]=copy.deepcopy(self.parents[key])
+            self.children[key].Set_ID(self.nextAvailableID)
+            self.nextAvailableID += 1
+       
 
     def Mutate(self):
-        self.child.Mutate()
+        for child in self.children:
+            self.children[child].Mutate()
+
+    def Evaluate(self,solutions):
+        for solution in solutions:
+            solutions[solution].Start_Simulation("DIRECT")#GUI
+
+
+        for solution in solutions:
+            solutions[solution].Wait_For_Simulation_To_End()
+        
+        
+
+
     
 
 
     def Select(self):
-        if self.child.fitness<self.parent.fitness:
-            self.parent=self.child
+        for key in self.parents:
+            if self.parents[key].fitness > self.children[key].fitness:
+                self.parents[key] = self.children[key]
        
     
     def Print(self):
-        print(f"{'='*20}\n{self.parent.fitness} : {self.child.fitness}\n{'='*20}")
+        for key in self.parents:
+            print(f"fitness:\nparent: {self.parents[key].fitness}\nchild: {self.children[key].fitness}\n")
 
     
     def Show_Best(self):
-        pass
-        # self.parent.Evaluate("GUI")
+        best = min(self.parents, key= lambda x: self.parents[x].fitness)
+        self.parents[best].Start_Simulation("GUI") 
+        print(f"best fitness: {self.parents[best].fitness}")
+
 
 
         
