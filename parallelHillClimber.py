@@ -3,12 +3,18 @@ import constants as c
 import copy
 import os
 
+
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
-        os.system("rm brain*.nndf")
-        os.system("rm fitness*.txt")
+        # try:
+        #     os.system("rm brain*.nndf")
+        #     os.system("rm fitness*.txt")
+        # except FileNotFoundError as e:
+        #     print(e)
+
         self.nextAvailableID = 0
         self.parents = {}
+
         for i in range(c.populationSize):
             self.parents[i] = solution.SOLUTION(self.nextAvailableID)
             self.nextAvailableID+=1
@@ -51,12 +57,6 @@ class PARALLEL_HILL_CLIMBER:
 
         for solution in solutions:
             solutions[solution].Wait_For_Simulation_To_End()
-        
-        
-
-
-    
-
 
     def Select(self):
         for key in self.parents:

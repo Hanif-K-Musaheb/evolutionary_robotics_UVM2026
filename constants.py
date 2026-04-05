@@ -6,8 +6,8 @@ time_step = (1/(60*8))/100
 
 dist2ground=.5
 
-numberOfGenerations = 10
-populationSize=10
+numberOfGenerations =10 #10
+populationSize= 10
 
 #front leg settings
 amplitude_F =  -numpy.pi/2
@@ -19,3 +19,8 @@ phaseOffset_F = 0
 amplitude_B = numpy.pi/2
 frequency_B = 20
 phaseOffset_B = 0
+
+numSensorNeurons=5
+numMotorNeurons=8
+
+motorJointRange=.2
