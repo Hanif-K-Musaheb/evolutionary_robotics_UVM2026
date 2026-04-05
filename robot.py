@@ -42,11 +42,13 @@ class ROBOT:
         #     self.motors[m].set_value(i,robotID)
 
     def Get_Fitness(self,robotId):
-        stateOfLinkZero = p.getLinkState(robotId,0)[0]
-        xCoordinateOfLinkZero = stateOfLinkZero[0]
+        basePositionAndOrientation = p.getBasePositionAndOrientation(robotId)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
+
         #print(stateOfLinkZero,xCoordinateOfLinkZero)
         with open(f"tmp{self.solutionID}.txt", "w") as file:
-            file.write(f"{xCoordinateOfLinkZero}")
+            file.write(f"{xPosition}")
         
         os.system(f"mv tmp{self.solutionID}.txt fitness{self.solutionID}.txt")
         #exit()
