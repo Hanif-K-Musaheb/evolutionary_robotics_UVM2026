@@ -102,25 +102,22 @@ class SOLUTION:
 
 
     def Create_Brain(self):
-
-
         pyrosim.Start_NeuralNetwork(f"brain_{self.myID}.nndf")
-        pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
-        pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 2 , linkName = "FrontLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "LeftLowerLeg")
-        pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "RightLowerLeg")
 
-        pyrosim.Send_Hidden_Neuron( name = 5 )
+        sensor_linkNames = ["Torso", "BackLowerLeg", "FrontLowerLeg", "LeftLowerLeg", "RightLowerLeg"]
+        motor_jointNames = ["BackLeg_BackLowerLeg", "FrontLeg_FrontLowerLeg", "LeftLeg_LeftLowerLeg", "RightLeg_RightLowerLeg",
+                            "Torso_BackLeg", "Torso_FrontLeg", "Torso_LeftLeg", "Torso_RightLeg"]
 
-        pyrosim.Send_Motor_Neuron(name = 6 , jointName = "BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 7 , jointName = "FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 8 , jointName = "LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 9 , jointName = "RightLeg_RightLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 10 , jointName = "Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron(name = 11 , jointName = "Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron(name = 12, jointName = "Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron(name = 13, jointName = "Torso_RightLeg")
+        for i in range(c.numSensorNeurons):
+            pyrosim.Send_Sensor_Neuron(name = i , linkName = sensor_linkNames[i])
+        
+        for i in range(c.numhiddenNeurons):
+            pyrosim.Send_Hidden_Neuron( name = i+c.numSensorNeurons )
+
+        for i in range(c.numMotorNeurons):
+            pyrosim.Send_Motor_Neuron(name = i + c.numSensorNeurons+c.numhiddenNeurons , jointName = motor_jointNames[i])
+
+        
 
 
 
@@ -133,6 +130,6 @@ class SOLUTION:
                 #check here for future issues when adding hidden neurons --> currentColumn+c.numSensorNeurons+c.numhiddenNeurons 
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow+c.numSensorNeurons , targetNeuronName = currentColumn+c.numSensorNeurons+c.numhiddenNeurons , weight = self.weights_h2m[currentRow][currentColumn] )
            
-        
+
         pyrosim.End()
       
