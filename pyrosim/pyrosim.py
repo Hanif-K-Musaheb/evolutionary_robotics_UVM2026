@@ -50,13 +50,14 @@ def Get_Touch_Sensor_Value_For_Link(linkName):
 
     pts = p.getContactPoints()
 
-    for pt in pts:
+    if pts is not None:
+        for pt in pts:
 
-        linkIndex = pt[4]
+            linkIndex = pt[4]
 
-        if ( linkIndex == desiredLinkIndex ):
+            if ( linkIndex == desiredLinkIndex ):
 
-            touchValue = 1.0
+                touchValue = 1.0
 
     return touchValue
 
@@ -143,6 +144,9 @@ def Send_Joint(name,parent,child,type,position, jointAxis):
 def Send_Motor_Neuron(name,jointName):
 
     f.write('    <neuron name = "' + str(name) + '" type = "motor"  jointName = "' + jointName + '" />\n')
+
+def Send_Hidden_Neuron(name):
+    f.write('    <neuron name = "' + str(name) + '" type = "hidden" />\n')
 
 def Send_Sensor_Neuron(name,linkName):
 

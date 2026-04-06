@@ -12,7 +12,11 @@ height = 1
 class SOLUTION:
     def __init__(self,nextAvailableID):
         self.myID = nextAvailableID
-        self.weights = (np.random.rand(c.numSensorNeurons,c.numMotorNeurons))*2-1
+        #synaptic weights from sensor to hidden
+        self.weights_s2h = (np.random.rand(c.numSensorNeurons,c.numhiddenNeurons))*2-1
+        #synaptic weights from hidden to motor
+        self.weights_h2m = (np.random.rand(c.numhiddenNeurons,c.numMotorNeurons))*2-1
+
     
 
     def Start_Simulation(self,directOrGUI):
@@ -44,9 +48,12 @@ class SOLUTION:
 
 
     def Mutate(self):
-        randomRow = random.randint(0, c.numSensorNeurons - 1)
-        randomColumn = random.randint(0, c.numMotorNeurons - 1)
-        self.weights[randomRow][randomColumn] = random.random() * 2 - 1 
+        randomHidden = random.randint(0, c.numhiddenNeurons - 1)
+        randomSensor = random.randint(0, c.numSensorNeurons - 1)
+        randomMotor = random.randint(0, c.numMotorNeurons - 1)
+        self.weights_s2h[randomSensor][randomHidden] = random.random() * 2 - 1 
+        self.weights_h2m[randomHidden][randomMotor] = random.random() * 2 - 1 
+
 
     def Set_ID(self, nextAvailableID):
         self.myID = nextAvailableID
@@ -95,6 +102,8 @@ class SOLUTION:
 
 
     def Create_Brain(self):
+
+
         pyrosim.Start_NeuralNetwork(f"brain_{self.myID}.nndf")
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")
         pyrosim.Send_Sensor_Neuron(name = 1 , linkName = "BackLowerLeg")
@@ -102,16 +111,28 @@ class SOLUTION:
         pyrosim.Send_Sensor_Neuron(name = 3 , linkName = "LeftLowerLeg")
         pyrosim.Send_Sensor_Neuron(name = 4 , linkName = "RightLowerLeg")
 
-        pyrosim.Send_Motor_Neuron(name = 5 , jointName = "BackLeg_BackLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 6 , jointName = "FrontLeg_FrontLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 7 , jointName = "LeftLeg_LeftLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 8 , jointName = "RightLeg_RightLowerLeg")
-        pyrosim.Send_Motor_Neuron(name = 9 , jointName = "Torso_BackLeg")
-        pyrosim.Send_Motor_Neuron(name = 10 , jointName = "Torso_FrontLeg")
-        pyrosim.Send_Motor_Neuron(name = 11, jointName = "Torso_LeftLeg")
-        pyrosim.Send_Motor_Neuron(name = 12, jointName = "Torso_RightLeg")
+        pyrosim.Send_Hidden_Neuron( name = 5 )
 
-        for currentRow in range(c.numSensorNeurons):
-            for currentColumn in range(c.numMotorNeurons):
-                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
+        pyrosim.Send_Motor_Neuron(name = 6 , jointName = "BackLeg_BackLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 7 , jointName = "FrontLeg_FrontLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 8 , jointName = "LeftLeg_LeftLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 9 , jointName = "RightLeg_RightLowerLeg")
+        pyrosim.Send_Motor_Neuron(name = 10 , jointName = "Torso_BackLeg")
+        pyrosim.Send_Motor_Neuron(name = 11 , jointName = "Torso_FrontLeg")
+        pyrosim.Send_Motor_Neuron(name = 12, jointName = "Torso_LeftLeg")
+        pyrosim.Send_Motor_Neuron(name = 13, jointName = "Torso_RightLeg")
+
+
+
+        for currentRow in range(c.numSensorNeurons):#sensor
+            for currentColumn in range(c.numhiddenNeurons):#motor
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights_s2h[currentRow][currentColumn] )
+                
+        for currentRow in range(c.numhiddenNeurons):#sensor
+            for currentColumn in range(c.numMotorNeurons):#motor
+                #check here for future issues when adding hidden neurons --> currentColumn+c.numSensorNeurons+c.numhiddenNeurons 
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow+c.numSensorNeurons , targetNeuronName = currentColumn+c.numSensorNeurons+c.numhiddenNeurons , weight = self.weights_h2m[currentRow][currentColumn] )
+           
+        
         pyrosim.End()
+      

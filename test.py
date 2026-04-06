@@ -1,2 +1,3 @@
 
-for i in range(2):print(i)
+import random
+print(random.randint(0,0))
