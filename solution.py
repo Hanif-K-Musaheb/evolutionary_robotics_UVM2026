@@ -38,12 +38,14 @@ class SOLUTION:
         print(f"\nfitness {self.myID}:{self.fitness}")
         fitness_file.close()
         os.system(f"rm fitness{self.myID}.txt")
+        os.system(f"rm world_{self.myID}.sdf")
+        os.system(f"rm body_{self.myID}.urdf")
 
 
 
     def Mutate(self):
-        randomRow = random.randint(0,2)
-        randomColumn = random.randint(0,1)
+        randomRow = random.randint(0, c.numSensorNeurons - 1)
+        randomColumn = random.randint(0, c.numMotorNeurons - 1)
         self.weights[randomRow][randomColumn] = random.random() * 2 - 1 
 
     def Set_ID(self, nextAvailableID):
@@ -57,11 +59,11 @@ class SOLUTION:
 
     
     def Create_World(self):
-        pyrosim.Start_SDF("world.sdf")
+        pyrosim.Start_SDF(f"world_{self.myID}.sdf")
         pyrosim.End()
     
     def Create_Body(self):
-        pyrosim.Start_URDF("body.urdf")
+        pyrosim.Start_URDF(f"body_{self.myID}.urdf")
         pyrosim.Send_Cube(name="Torso", pos=[0, 0, 1], size=[length, width, height])
 
         pyrosim.Send_Joint(name="Torso_BackLeg", parent="Torso", child="BackLeg", type="revolute", position=[0, -0.5, 1], jointAxis= "1 0 0")
@@ -113,11 +115,3 @@ class SOLUTION:
             for currentColumn in range(c.numMotorNeurons):
                 pyrosim.Send_Synapse( sourceNeuronName = currentRow , targetNeuronName = currentColumn+c.numSensorNeurons , weight = self.weights[currentRow][currentColumn] )
         pyrosim.End()
-
-
-
-
-
-
-
-

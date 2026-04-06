@@ -21,9 +21,9 @@ class SIMULATION:
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
         p.setGravity(0,0,-9.8)
-        p.loadSDF("world.sdf")
+        p.loadSDF(f"world_{solutionID}.sdf")
         self.planeId = p.loadURDF("plane.urdf")
-        self.robotId = p.loadURDF("body.urdf")
+        self.robotId = p.loadURDF(f"body_{solutionID}.urdf")
 
         pyrosim.Prepare_To_Simulate(self.robotId)
         self.robot.Prepare_To_Sense()

@@ -34,6 +34,14 @@ class NEURAL_NETWORK:
                 self.neurons[neuronName].Update_Sensor_Neuron()
             else:
                 self.neurons[neuronName].Update_Hidden_Or_Motor_Neuron()
+
+        for (sourceNeuronName, targetNeuronName) in self.synapses.keys():
+            weight = self.synapses[sourceNeuronName, targetNeuronName].Get_Weight()
+            self.neurons[targetNeuronName].Add_To_Value(self.neurons[sourceNeuronName].Get_Value() * weight)
+            
+        for neuronName in self.neurons.keys():
+            if not self.neurons[neuronName].Is_Sensor_Neuron():
+                self.neurons[neuronName].Threshold()
     
     def Get_Neuron_Names(self):
         return self.neurons.keys()
