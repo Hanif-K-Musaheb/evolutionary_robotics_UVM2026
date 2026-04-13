@@ -22,6 +22,6 @@ phaseOffset_B = 0
 
 numSensorNeurons=5
 numMotorNeurons=8
-numhiddenNeurons=4
+numhiddenNeurons=3
 
 motorJointRange=.2

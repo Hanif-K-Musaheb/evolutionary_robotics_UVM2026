@@ -36,6 +36,10 @@ class ROBOT:
                 desiredAngle = self.nn.Get_Value_Of(neuronName)
                 self.motors[jointNameBytes].set_value(desiredAngle*c.motorJointRange, robotID)
 
+    def log_sense(self,it):
+        self.nn.save_hidden_neuron_data(it)
+        
+        
 
 
         # for m in self.motors:

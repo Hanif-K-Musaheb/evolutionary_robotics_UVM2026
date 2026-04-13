@@ -2,6 +2,8 @@ from pyrosim.neuron  import NEURON
 
 from pyrosim.synapse import SYNAPSE
 
+import csv
+
 class NEURAL_NETWORK: 
 
     def __init__(self,nndfFileName):
@@ -26,7 +28,19 @@ class NEURAL_NETWORK:
 
         self.Print_Motor_Neuron_Values()
 
+        
+
         print("")
+
+    def save_hidden_neuron_data(self,it):
+        hidden_neuron_vals= [it] + self.Hidden_Neuron_Values2list()
+ 
+
+
+        with open('hidden_neuron_data.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(hidden_neuron_vals)
+
     
     def Update(self):
         for neuronName in self.neurons.keys():
@@ -104,6 +118,8 @@ class NEURAL_NETWORK:
 
         print("")
 
+
+
     def Print_Hidden_Neuron_Values(self):
 
         print("hidden neuron values: " , end = "" )
@@ -114,7 +130,14 @@ class NEURAL_NETWORK:
 
                 self.neurons[neuronName].Print()
 
+
         print("")
+
+
+
+
+
+
 
     def Print_Motor_Neuron_Values(self):
 
@@ -127,3 +150,13 @@ class NEURAL_NETWORK:
                 self.neurons[neuronName].Print()
 
         print("")
+
+
+    def Hidden_Neuron_Values2list(self):
+        hidden_neuron_vals=[]
+        for neuronName in sorted(self.neurons):
+            if self.neurons[neuronName].Is_Hidden_Neuron():
+                hidden_neuron_vals.append(self.neurons[neuronName].Get_Value())
+        return hidden_neuron_vals
+
+
