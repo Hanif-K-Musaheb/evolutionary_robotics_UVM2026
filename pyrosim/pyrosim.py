@@ -148,6 +148,10 @@ def Send_Motor_Neuron(name,jointName):
 def Send_Hidden_Neuron(name):
     f.write('    <neuron name = "' + str(name) + '" type = "hidden" />\n')
 
+def Send_Recurrent_Neuron(name):
+    f.write('    <neuron name = "' + str(name) + '" type = "recurrent" />\n')
+
+
 def Send_Sensor_Neuron(name,linkName):
 
     f.write('    <neuron name = "' + str(name) + '" type = "sensor" linkName = "' + linkName + '" />\n')

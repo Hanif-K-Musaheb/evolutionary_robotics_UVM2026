@@ -53,6 +53,10 @@ class NEURON:
     def Is_Hidden_Neuron(self):
 
         return self.type == c.HIDDEN_NEURON
+    
+    def Is_Recurrent_Neuron(self):
+
+        return self.type == c.RECURRENT_NEURON
 
     def Is_Motor_Neuron(self):
 
@@ -91,6 +95,9 @@ class NEURON:
         elif "motor" in line:
 
             self.type = c.MOTOR_NEURON
+
+        elif "recurrent" in line:
+            self.type = c.RECURRENT_NEURON
 
         else:
 
