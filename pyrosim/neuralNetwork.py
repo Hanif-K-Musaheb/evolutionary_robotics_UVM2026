@@ -28,18 +28,23 @@ class NEURAL_NETWORK:
 
         self.Print_Motor_Neuron_Values()
 
+        self.Print_Recursive_Neuron_Values()
+
         
 
         print("")
 
     def save_hidden_neuron_data(self,it):
         hidden_neuron_vals= [it] + self.Hidden_Neuron_Values2list()
- 
-
-
         with open('hidden_neuron_data.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(hidden_neuron_vals)
+    
+    def save_recurrent_neuron_data(self,it):
+        recurrent_neuron_vals= [it] + self.Recurrent_Neuron_Values2list()
+        with open('recurrent_neuron_data.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(recurrent_neuron_vals)
 
     
     def Update(self):
@@ -119,7 +124,6 @@ class NEURAL_NETWORK:
         print("")
 
 
-
     def Print_Hidden_Neuron_Values(self):
 
         print("hidden neuron values: " , end = "" )
@@ -130,13 +134,19 @@ class NEURAL_NETWORK:
 
                 self.neurons[neuronName].Print()
 
-
         print("")
 
+    def Print_Recursive_Neuron_Values(self):
 
+        print("recurrent neuron values: " , end = "" )
 
+        for neuronName in sorted(self.neurons):
 
+            if self.neurons[neuronName].Is_Recurrent_Neuron():
 
+                self.neurons[neuronName].Print()
+
+        print("")
 
 
     def Print_Motor_Neuron_Values(self):
@@ -158,5 +168,12 @@ class NEURAL_NETWORK:
             if self.neurons[neuronName].Is_Hidden_Neuron():
                 hidden_neuron_vals.append(self.neurons[neuronName].Get_Value())
         return hidden_neuron_vals
+
+    def Recurrent_Neuron_Values2list(self):
+        recurrent_neuron_vals=[]
+        for neuronName in sorted(self.neurons):
+            if self.neurons[neuronName].Is_Recurrent_Neuron():
+                recurrent_neuron_vals.append(self.neurons[neuronName].Get_Value())
+        return recurrent_neuron_vals
 
 

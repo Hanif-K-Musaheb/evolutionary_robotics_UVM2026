@@ -7,6 +7,9 @@ import parallelHillClimber
 #     os.system("python3 simulate.py")
 
 os.system("rm hidden_neuron_data.csv")
+os.system("rm recurrent_neuron_data.csv")
+
+
 
 
 phc = parallelHillClimber.PARALLEL_HILL_CLIMBER()

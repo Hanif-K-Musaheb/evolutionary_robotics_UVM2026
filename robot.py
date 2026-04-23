@@ -7,12 +7,15 @@ import pybullet as p
 from pyrosim.neuralNetwork import NEURAL_NETWORK
 import os
 import time
+import csv
+
 
 class ROBOT:
     def __init__(self,solutionID):
         self.nn = NEURAL_NETWORK(f"brain_{solutionID}.nndf")#adds the neural net to nndf file
         self.solutionID = solutionID
         #os.system(f"rm brain_{solutionID}.nndf")
+        self.fitness_data=[]
         
     def Prepare_To_Sense(self):
         self.sensors={}
@@ -38,12 +41,27 @@ class ROBOT:
 
     def log_sense(self,it):
         self.nn.save_hidden_neuron_data(it)
+        self.nn.save_recurrent_neuron_data(it)
         
-        
-
 
         # for m in self.motors:
         #     self.motors[m].set_value(i,robotID)
+    
+    def collect_fitness_data(self,solutionID):
+        basePositionAndOrientation = p.getBasePositionAndOrientation(1)
+        basePosition = basePositionAndOrientation[0]
+        xPosition = basePosition[0]
+
+        self.fitness_data.append(xPosition)
+
+    
+    
+    def log_fittness(self,solutionID):
+        labelled_data = [solutionID, *self.fitness_data]
+        with open('brainacs_fitness_data.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(labelled_data)
+        
 
     def Get_Fitness(self,robotId):
         basePositionAndOrientation = p.getBasePositionAndOrientation(robotId)

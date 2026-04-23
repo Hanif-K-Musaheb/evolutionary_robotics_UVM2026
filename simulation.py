@@ -5,7 +5,7 @@ import pyrosim.pyrosim as pyrosim
 from robot import ROBOT
 import time
 from world import WORLD
-
+ 
 
 class SIMULATION:
     def __init__(self,directOrGUI,solutionID):
@@ -29,11 +29,11 @@ class SIMULATION:
         self.robot.Prepare_To_Sense()
         self.robot.Prepare_To_Act()
 
+        self.solutionID=solutionID
+
     def Get_fitness(self):
         self.robot.Get_Fitness(self.robotId)
         
-       
-    
     def __del__(self):
         p.disconnect()
     
@@ -43,6 +43,8 @@ class SIMULATION:
             p.stepSimulation()
             self.robot.sense(it)
 
+            self.robot.collect_fitness_data(self.solutionID)
+
             if directOrGUI == "GUI":
                 self.robot.log_sense(it)
 
@@ -50,7 +52,12 @@ class SIMULATION:
             self.robot.Think()
             self.robot.Act(it,self.robotId)
 
-            if directOrGUI!= "DIRECT" and directOrGUI!= None:time.sleep(c.time_step)
+            if directOrGUI!= "DIRECT" and directOrGUI!= None:
+                time.sleep(c.time_step)
+        
+        self.robot.log_fittness(self.solutionID)
+  
+                
         
         self.robot.Get_Fitness(self.robotId)
             

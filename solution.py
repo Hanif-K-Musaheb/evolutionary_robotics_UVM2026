@@ -33,8 +33,6 @@ class SOLUTION:
         self.Create_Body()
         self.Create_Brain()
 
-        
-
         if os.path.exists(f"fitness{self.myID}.txt"):
             os.remove(f"fitness{self.myID}.txt")
             
@@ -52,7 +50,6 @@ class SOLUTION:
         os.system(f"rm fitness{self.myID}.txt")
         os.system(f"rm world_{self.myID}.sdf")
         os.system(f"rm body_{self.myID}.urdf")
-
 
 
     def Mutate(self):
