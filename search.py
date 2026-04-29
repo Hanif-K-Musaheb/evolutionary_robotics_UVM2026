@@ -7,7 +7,7 @@ import parallelHillClimber
 #     os.system("python3 simulate.py")
 
 
-for i in range(2):
+for i in range(20):
     os.system("rm hidden_neuron_data.csv")
     os.system("rm recurrent_neuron_data.csv")
 

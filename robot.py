@@ -58,7 +58,7 @@ class ROBOT:
     
     def log_fittness(self,solutionID):
         #labelled_data = [solutionID, *self.fitness_data]
-        with open('peak_brainacs_fitness_data.csv', 'a', newline='') as file:
+        with open('peak_normal_brain_fitness_data.csv', 'a', newline='') as file:#'peak_brainacs_fitness_data.csv'
             writer = csv.writer(file)
             writer.writerow(self.fitness_data)#labelled_data)
         
