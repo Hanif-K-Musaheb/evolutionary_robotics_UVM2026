@@ -16,7 +16,7 @@ class SIMULATION:
         if directOrGUI== "DIRECT" or directOrGUI == None:
             self.physicsClient = p.connect(p.DIRECT)#p.GUI)
         else:
-            self.physicsClient = p.connect(p.DIRECT)#p.GUI)
+            self.physicsClient = p.connect(p.GUI)#p.GUI)
 
         p.setAdditionalSearchPath(pybullet_data.getDataPath())
 
@@ -42,10 +42,18 @@ class SIMULATION:
         for it in range(c.steps_in_sim):
             p.stepSimulation()
             self.robot.sense(it)
-            
-            if directOrGUI == "GUI":
-                self.robot.log_sense(it)
-                self.robot.collect_fitness_data(self.solutionID)
+
+            # if directOrGUI == "GUI":
+            #     self.robot.log_sense(it)
+            #     self.robot.collect_fitness_data(self.solutionID)
+
+            # if it == 999:
+            #     self.robot.collect_fitness_data(self.solutionID)
+            #     self.robot.log_fittness(self.solutionID)
+
+
+
+
 
 
             self.robot.Think()
@@ -54,11 +62,9 @@ class SIMULATION:
             if directOrGUI!= "DIRECT" and directOrGUI!= None:
                 time.sleep(c.time_step)
         
-        if directOrGUI == "GUI":
-            self.robot.log_fittness(self.solutionID)
-  
-                
-        
+        # if directOrGUI == "GUI":
+        #     self.robot.log_fittness(self.solutionID)
+ 
         self.robot.Get_Fitness(self.robotId)
             
 

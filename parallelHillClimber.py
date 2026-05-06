@@ -2,7 +2,7 @@ import solution
 import constants as c
 import copy
 import os
-
+import csv
 
 class PARALLEL_HILL_CLIMBER:
     def __init__(self):
@@ -19,6 +19,8 @@ class PARALLEL_HILL_CLIMBER:
             self.parents[i] = solution.SOLUTION(self.nextAvailableID)
             self.nextAvailableID+=1
 
+        self.fitness_data=[]
+
 
     def Evolve(self):
         self.Evaluate(self.parents)
@@ -32,8 +34,21 @@ class PARALLEL_HILL_CLIMBER:
         self.Spawn()
         self.Mutate()
         self.Evaluate(self.children)
+        self.fittest_of_gen(self.children)
         self.Print()
         self.Select()
+
+       
+
+    def fittest_of_gen(self,solutions):
+        generation_fitness=[]
+        for solution in solutions:
+            generation_fitness.append(solutions[solution].Get_Fitness())
+
+        self.fitness_data.append(max(generation_fitness))
+        
+        
+
         
 
     def Spawn(self):
@@ -47,6 +62,7 @@ class PARALLEL_HILL_CLIMBER:
     def Mutate(self):
         for child in self.children:
             self.children[child].Mutate()
+            
 
     def Evaluate(self,solutions):
         for solution in solutions:
@@ -56,13 +72,15 @@ class PARALLEL_HILL_CLIMBER:
         for solution in solutions:
             solutions[solution].Wait_For_Simulation_To_End()
 
+
     def Select(self):
         for key in self.parents:
+            #print(f"{self.children[key].fitness}    {self.parents[key].fitness}    {self.children[key].fitness > self.parents[key].fitness}")
             if self.children[key].fitness > self.parents[key].fitness:
                 self.parents[key] = self.children[key]
        
     
-    def Print(self):
+    def Print(self):#explore if other
         for key in self.parents:
             print(f"fitness:\nparent: {self.parents[key].fitness}\nchild: {self.children[key].fitness}\n")
 
@@ -71,6 +89,12 @@ class PARALLEL_HILL_CLIMBER:
         best = max(self.parents, key= lambda x: self.parents[x].fitness)
         self.parents[best].Start_Simulation("GUI") 
         print(f"best fitness: {self.parents[best].fitness}")
+
+    def log_fitness_data(self):
+        with open('brainiac_brain_generation_fitness20.csv', 'a', newline='') as file:#'peak_brainacs_fitness_data.csv'
+            writer = csv.writer(file)
+            writer.writerow(self.fitness_data)#labelled_data)
+
 
 
 

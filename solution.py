@@ -4,6 +4,8 @@ import os
 import random
 import time
 import constants as c
+import csv
+
 
 length = 1
 width = 1
@@ -49,18 +51,39 @@ class SOLUTION:
         fitness_file = open(f"fitness{self.myID}.txt")
         self.fitness = float(fitness_file.readline())
         print(f"\nfitness {self.myID}:{self.fitness}")
+
+
+        # with open('normal_brain_generation_fitness.csv', 'a', newline='') as file:#'peak_brainacs_fitness_data.csv'
+        #     writer = csv.writer(file)
+        #     writer.writerow([self.fitness])
+
         fitness_file.close()
         os.system(f"rm fitness{self.myID}.txt")
         os.system(f"rm world_{self.myID}.sdf")
         os.system(f"rm body_{self.myID}.urdf")
 
+    def Get_Fitness(self):
+        return self.fitness
+    
 
-    def Mutate(self):
+
+    def Mutate(self):#import to change between A/B models
+        # randomRow = random.randint(0, c.numSensorNeurons - 1)
+        # randomColumn = random.randint(0, c.numMotorNeurons - 1)
+        # self.weights[randomRow][randomColumn] = random.random() * 2 - 1
+
+
         randomHidden = random.randint(0, c.numhiddenNeurons - 1)
         randomSensor = random.randint(0, c.numSensorNeurons - 1)
         randomMotor = random.randint(0, c.numMotorNeurons - 1)
+
+        randomHidden_recursive = random.randint(0, c.numhiddenNeurons - 1)
+        randomRecursive = random.randint(0, c.numRecursiveNeurons - 1)
+
         self.weights_s2h[randomSensor][randomHidden] = random.random() * 2 - 1 
         self.weights_h2m[randomHidden][randomMotor] = random.random() * 2 - 1 
+        self.weights_h2r[randomHidden_recursive][randomRecursive] = random.random() * 2 - 1 
+        self.weights_r2h[randomRecursive][randomHidden_recursive] = random.random() * 2 - 1 
 
 
     def Set_ID(self, nextAvailableID):
@@ -110,45 +133,45 @@ class SOLUTION:
         motor_jointNames = ["BackLeg_BackLowerLeg", "FrontLeg_FrontLowerLeg", "LeftLeg_LeftLowerLeg", "RightLeg_RightLowerLeg",
                             "Torso_BackLeg", "Torso_FrontLeg", "Torso_LeftLeg", "Torso_RightLeg"]
 
-        # for i in range(c.numSensorNeurons):
-        #     pyrosim.Send_Sensor_Neuron(name = i , linkName = sensor_linkNames[i])
+        for i in range(c.numSensorNeurons):
+            pyrosim.Send_Sensor_Neuron(name = i , linkName = sensor_linkNames[i])
         
-        # for i in range(c.numhiddenNeurons):
-        #     pyrosim.Send_Hidden_Neuron( name = i+c.numSensorNeurons )
+        for i in range(c.numhiddenNeurons):
+            pyrosim.Send_Hidden_Neuron( name = i+c.numSensorNeurons )
 
-        # for i in range(c.numRecursiveNeurons):
-        #     pyrosim.Send_Recurrent_Neuron(name = i+c.numSensorNeurons+c.numhiddenNeurons)
+        for i in range(c.numRecursiveNeurons):
+            pyrosim.Send_Recurrent_Neuron(name = i+c.numSensorNeurons+c.numhiddenNeurons)
 
-        # for i in range(c.numMotorNeurons):
-        #     pyrosim.Send_Motor_Neuron(name = i + c.numSensorNeurons+c.numhiddenNeurons+c.numRecursiveNeurons , jointName = motor_jointNames[i])
+        for i in range(c.numMotorNeurons):
+            pyrosim.Send_Motor_Neuron(name = i + c.numSensorNeurons+c.numhiddenNeurons+c.numRecursiveNeurons , jointName = motor_jointNames[i])
 
         
 
 
 
-        # for currentRow in range(c.numSensorNeurons):#sensor
-        #     for currentColumn in range(c.numhiddenNeurons):#motor
-        #         pyrosim.Send_Synapse( sourceNeuronName = currentRow , 
-        #                              targetNeuronName = currentColumn+c.numSensorNeurons , 
-        #                              weight = self.weights_s2h[currentRow][currentColumn])
+        for currentRow in range(c.numSensorNeurons):#sensor
+            for currentColumn in range(c.numhiddenNeurons):#motor
+                pyrosim.Send_Synapse( sourceNeuronName = currentRow , 
+                                     targetNeuronName = currentColumn+c.numSensorNeurons , 
+                                     weight = self.weights_s2h[currentRow][currentColumn])
 
-        # for currentRow in range(c.numhiddenNeurons):#hidden
-        #     pyrosim.Send_Synapse(sourceNeuronName=currentRow+c.numSensorNeurons,
-        #                         targetNeuronName=currentRow+c.numSensorNeurons+c.numhiddenNeurons,
-        #                         weight=self.weights_h2r[currentRow][currentColumn])
+        for currentRow in range(c.numhiddenNeurons):#hidden
+            pyrosim.Send_Synapse(sourceNeuronName=currentRow+c.numSensorNeurons,
+                                targetNeuronName=currentRow+c.numSensorNeurons+c.numhiddenNeurons,
+                                weight=self.weights_h2r[currentRow][currentColumn])
             
-        # for currentRow in range(c.numRecursiveNeurons):#recursive
-        #     pyrosim.Send_Synapse(sourceNeuronName=currentRow+c.numSensorNeurons+c.numhiddenNeurons,
-        #                         targetNeuronName =currentRow+c.numSensorNeurons,
-        #                         weight=self.weights_r2h[currentRow][currentColumn])
+        for currentRow in range(c.numRecursiveNeurons):#recursive
+            pyrosim.Send_Synapse(sourceNeuronName=currentRow+c.numSensorNeurons+c.numhiddenNeurons,
+                                targetNeuronName =currentRow+c.numSensorNeurons,
+                                weight=self.weights_r2h[currentRow][currentColumn])
 
                 
-        # for currentRow in range(c.numhiddenNeurons):#hidden
-        #     for currentColumn in range(c.numMotorNeurons):#motor
-        #         #check here for future issues when adding hidden neurons --> currentColumn+c.numSensorNeurons+c.numhiddenNeurons 
-        #         pyrosim.Send_Synapse(sourceNeuronName = currentRow+c.numSensorNeurons, 
-        #                              targetNeuronName = currentColumn+c.numSensorNeurons+c.numhiddenNeurons+c.numRecursiveNeurons,
-        #                              weight = self.weights_h2m[currentRow][currentColumn-c.numRecursiveNeurons])
+        for currentRow in range(c.numhiddenNeurons):#hidden
+            for currentColumn in range(c.numMotorNeurons):#motor
+                #check here for future issues when adding hidden neurons --> currentColumn+c.numSensorNeurons+c.numhiddenNeurons 
+                pyrosim.Send_Synapse(sourceNeuronName = currentRow+c.numSensorNeurons, 
+                                     targetNeuronName = currentColumn+c.numSensorNeurons+c.numhiddenNeurons+c.numRecursiveNeurons,
+                                     weight = self.weights_h2m[currentRow][currentColumn-c.numRecursiveNeurons])
 
 
         pyrosim.Send_Sensor_Neuron(name = 0 , linkName = "Torso")

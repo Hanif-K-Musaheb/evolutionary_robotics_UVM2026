@@ -6,7 +6,7 @@ time_step = 0#(1/(60*8))/100
 
 dist2ground=.5
 
-numberOfGenerations =10 #10
+numberOfGenerations =100 #10
 populationSize= 10
 
 #front leg settings
