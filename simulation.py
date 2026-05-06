@@ -42,9 +42,7 @@ class SIMULATION:
         for it in range(c.steps_in_sim):
             p.stepSimulation()
             self.robot.sense(it)
-
             
-
             if directOrGUI == "GUI":
                 self.robot.log_sense(it)
                 self.robot.collect_fitness_data(self.solutionID)
